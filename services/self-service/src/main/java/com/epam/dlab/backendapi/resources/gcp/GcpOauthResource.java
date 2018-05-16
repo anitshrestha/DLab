@@ -1,15 +1,16 @@
 package com.epam.dlab.backendapi.resources.gcp;
 
-import com.epam.dlab.auth.gcp.dto.GcpOauth2AuthorizationCodeResponse;
 import com.epam.dlab.constants.ServiceConsts;
+import com.epam.dlab.dto.gcp.auth.GcpOauth2AuthorizationCodeResponse;
 import com.epam.dlab.rest.client.RESTService;
-import com.epam.dlab.rest.contracts.SecurityAPI;
+import com.epam.dlab.auth.contract.SecurityAPI;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/user/gcp")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -24,7 +25,9 @@ public class GcpOauthResource {
 	@GET
 	@Path("/init")
 	public Response redirectedUrl() {
-		return securityService.get(SecurityAPI.INIT_LOGIN_OAUTH_GCP, Response.class);
+		return Response
+				.seeOther(URI.create(securityService.get(SecurityAPI.INIT_LOGIN_OAUTH_GCP, String.class)))
+				.build();
 	}
 
 	@GET
